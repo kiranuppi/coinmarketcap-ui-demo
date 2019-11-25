@@ -15,7 +15,7 @@ import java.util.List;
 
 public class HomePage extends BasePage {
 
-//    JavascriptExecutor js = (JavascriptExecutor) driver;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
 
     @FindBy(how = How.LINK_TEXT, using = "View All")
     private WebElement lnk_ViewAll;
@@ -37,7 +37,7 @@ public class HomePage extends BasePage {
     @FindBy(how = How.XPATH, using = "//table/tbody/tr")
     private List<WebElement> tbl_watchList;
 
-    @FindBy(how = How.XPATH, using = "//a[text()='Cryptocurrencies ']/span[@class='caret']")
+    @FindBy(how = How.LINK_TEXT, using = "Cryptocurrencies")
     private WebElement lnk_Cryptocurrencies;
 
     @FindBy(how = How.LINK_TEXT, using = "Full List")
@@ -53,8 +53,13 @@ public class HomePage extends BasePage {
     @FindBy(how = How.ID, using = "filter_volume")
     private WebElement sel_volumeFilter;
 
+    @FindBy(how = How.XPATH, using = "//div[@class='banner-alert-close']")
+    private WebElement eleCookieBanner;
+
     @FindBy(how = How.XPATH, using = "//table[@id='currencies-all']//tbody/tr")
     private List<WebElement> tbl_filtered_ccys;
+
+
 
     public HomePage() {
         PageFactory.initElements(driver, this);
@@ -73,15 +78,16 @@ public class HomePage extends BasePage {
         clickOnLinkName();
     }
 
-    public void clickOnLinkName() {
-        lnk_AddToWatchList.click();
-        System.out.println("Added to WatchList");
+    public void clickOnLinkName() throws InterruptedException {
+        waitforElementThenClick(driver,lnk_AddToWatchList);
+        //lnk_AddToWatchList.click();
     }
 
     public void clickOnWatchList() {
 
-        Actions newTab = new Actions(driver);
-        newTab.keyDown(Keys.CONTROL).click(lnk_Watchlist).keyUp(Keys.CONTROL).build().perform();
+        js.executeScript("arguments[0].scrollIntoView();", lnk_Watchlist);
+        String selectLinkOpeninNewTab = Keys.chord(Keys.CONTROL,Keys.RETURN);
+        lnk_Watchlist.sendKeys(selectLinkOpeninNewTab);
 
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
@@ -92,10 +98,11 @@ public class HomePage extends BasePage {
     }
 
     public void clickOnCryptocurrenciesDropdown() throws InterruptedException {
-        lnk_Cryptocurrencies.click();
+        eleCookieBanner.click();
+        waitforElementThenClick(driver,lnk_Cryptocurrencies);
     }
 
-    public void clickOnFullListLink() throws InterruptedException {
+    public void clickOnFullListLink() {
         lnk_FullList.click();
     }
 

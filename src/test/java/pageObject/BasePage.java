@@ -34,7 +34,7 @@ public class BasePage {
 
     }
 
-    public static void waitforElementToBeVisibleThenClick(WebDriver driver, String element) throws InterruptedException {
+    public static void waitforElementToBeVisible(WebDriver driver, String element) throws InterruptedException {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 20);
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(element)));
