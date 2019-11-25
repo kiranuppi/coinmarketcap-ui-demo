@@ -25,12 +25,5 @@ public class Hooks {
         TestRunner.scenario = scenario;
     }
 
-    @After
-    public void after(Scenario scenario) {
-
-        if (scenario.isFailed()) {
-            Driver.embedScreenshot();
-        }
-    }
 
 }
